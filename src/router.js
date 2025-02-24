@@ -9,9 +9,15 @@ const artistSql =
   '"artistId","firstName","lastName","nationality","gender","yearOfBirth","yearOfDeath","details","artistLink"';
 const galleriesSql =
   ' "galleryId","galleryName","galleryNativeName","galleryCity","galleryAddress","galleryCountry","latitude","longitude","galleryWebSite","flickrPlaceId","yahooWoeId","googlePlaceId"';
-const paintingsSql =
-  "paintingId, imageFileName, title, shapeId, museumLink, accessionNumber, copyrightText, description, excerpt, yearOfWork, width, height, medium, cost, MSRP, googleLink, googleDescription, wikiLink, jsonAnnotations, artists (artistId, firstName, lastName, nationality, gender, yearOfBirth, yearOfDeath, details, artistLink), galleries (galleryId, galleryName, galleryNativeName, galleryCity, galleryAddress, galleryCountry, latitude, longitude, galleryWebSite, flickrPlaceId, yahooWoeId, googlePlaceId)";
-
+const paintingsSql = `
+paintingId, imageFileName, title, shapeId, museumLink, accessionNumber, copyrightText, 
+description, excerpt, yearOfWork, width, height, medium, cost, MSRP, googleLink, 
+googleDescription, wikiLink, jsonAnnotations, 
+artists (artistId, firstName, lastName, nationality, gender, yearOfBirth, yearOfDeath, details, artistLink), 
+galleries (galleryId, galleryName, galleryNativeName, galleryCity, galleryAddress, 
+          galleryCountry, latitude, longitude, galleryWebSite, flickrPlaceId, yahooWoeId, googlePlaceId)
+`;
+const genreSql = `genreId, genreName, eraId, description, wikiLink, eras (eraId, eraName, eraYears)`;
 const jsonMsg = (message) => {
   return { message: message };
 };
@@ -220,7 +226,7 @@ const getPaintingsBySearch = (app) => {
   });
 };
 
-// do error handleingcd
+// do error handle errors
 const getPaintingsInRange = (app) => {
   app.get("/api/paintings/years/:start/:end", async (req, res) => {
     const { data, error } = await db
@@ -229,6 +235,128 @@ const getPaintingsInRange = (app) => {
       .gte("yearOfWork", req.params.start)
       .lte("yearOfWork", req.params.end)
       .order("title", { ascending: true });
+
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getPaintingsByGalleryId = (app) => {
+  app.get("/api/paintings/galleries/:id", async (req, res) => {
+    const { data, error } = await db
+      .from("paintings")
+      .select(paintingsSql)
+      .eq("galleryId", req.params.id)
+      .order("title", { ascending: true });
+
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getPaintingsByArtistId = (app) => {
+  app.get("/api/paintings/artist/:id", async (req, res) => {
+    const { data, error } = await db
+      .from("paintings")
+      .select(paintingsSql)
+      .eq("artistId", req.params.id)
+      .order("title", { ascending: true });
+
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getPaintingsByArtistCountry = (app) => {
+  app.get("/api/paintings/artist/country/:substring", async (req, res) => {
+    const { data, error } = await db
+      .from("paintings")
+      .select(paintingsSql)
+      .ilike("artists.nationality", `${req.params.substring}%`)
+      .order("title", { ascending: true });
+
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    let filteredData = data.filter((d) => d.artists !== null);
+    res.send(filteredData);
+  });
+};
+
+const getAllGenres = (app) => {
+  app.get("/api/genres", async (req, res) => {
+    const { data, error } = await db.from("genres").select(genreSql);
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getGenresByPaintingId = (app) => {
+  app.get("/api/genres/painting/:id", async (req, res) => {
+    const { data, error } = await db
+      .from("genres")
+      .select(genreSql)
+      .eq("paintingGenres.paintingId", req.params.id)
+      .order("genreName", { ascending: true });
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getGenresById = (app) => {
+  app.get("/api/genres/:id", async (req, res) => {
+    const { data, error } = await db
+      .from("genres")
+      .select(genreSql)
+      .eq("genreId", req.params.id);
+
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getPaintingInfoFromGenreId = (app) => {
+  app.get("/api/paintings/genre/:id", async (req, res) => {
+    const { data, error } = await db
+      .from("paintingGenres")
+      .select(`paintings:paintings (paintingId, title, yearOfWork)`)
+      .eq("genreId", req.params.id)
+      .order("paintings(yearOfWork)", {
+        ascending: true,
+      });
 
     if (error) {
       res.send(jsonMsg("Error: unable to satisfy request", error));
@@ -254,4 +382,11 @@ module.exports = {
   getPaintingById,
   getPaintingsBySearch,
   getPaintingsInRange,
+  getPaintingsByGalleryId,
+  getPaintingsByArtistId,
+  getPaintingsByArtistCountry,
+  getAllGenres,
+  getGenresById,
+  getGenresByPaintingId,
+  getPaintingInfoFromGenreId,
 };

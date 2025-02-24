@@ -21,6 +21,13 @@ router.getArtistsById(app);
 router.getPaintingById(app);
 router.getPaintingsBySearch(app);
 router.getPaintingsInRange(app);
+router.getPaintingsByGalleryId(app);
+router.getPaintingsByArtistId(app);
+router.getPaintingsByArtistCountry(app);
+router.getAllGenres(app);
+router.getGenresById(app);
+router.getGenresByPaintingId(app);
+router.getPaintingInfoFromGenreId(app);
 
 app.listen(PORT, () => {
   console.log("Server is listening on port: " + PORT);
