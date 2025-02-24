@@ -31,11 +31,12 @@ paintingRouter.getPaintingsInRange(app);
 paintingRouter.getPaintingsByGalleryId(app);
 paintingRouter.getPaintingsByArtistId(app);
 paintingRouter.getPaintingsByArtistCountry(app);
+paintingRouter.getPaintingInfoFromGenreId(app);
+paintingRouter.getPaintingInfoFromEraId(app);
 
 genreRouter.getAllGenres(app);
 genreRouter.getGenresById(app);
 genreRouter.getGenresByPaintingId(app);
-paintingRouter.getPaintingInfoFromGenreId(app);
 
 app.listen(PORT, () => {
   console.log("Server is listening on port: " + PORT);

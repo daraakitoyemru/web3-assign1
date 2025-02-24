@@ -182,6 +182,28 @@ const getPaintingInfoFromGenreId = (app) => {
   });
 };
 
+const getPaintingInfoFromEraId = (app) => {
+  app.get("/api/paintings/era/:id", async (req, res) => {
+    const { data, error } = await db
+      .from("paintingGenres")
+      .select(
+        `paintings:paintings (paintingId, title, yearOfWork), era:genreId!inner (eraId)`
+      )
+      .eq("genreId.eraId", req.params.id)
+      .order("paintings(yearOfWork)", {
+        ascending: true,
+      });
+
+    if (error) {
+      res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
+    }
+
+    res.send(data);
+  });
+};
 module.exports = {
   getAllPaintings,
   getPaintingById,
@@ -192,4 +214,5 @@ module.exports = {
   getPaintingsBySearch,
   getPaintingsByTitleOrYear,
   getPaintingInfoFromGenreId,
+  getPaintingInfoFromEraId,
 };
