@@ -1,5 +1,10 @@
 const express = require("express");
-const router = require("./router");
+
+const erasRouter = require("./api/erasdb");
+const galleriesRouter = require("./api/galleriesdb");
+const artistRouter = require("./api/artistsdb");
+const paintingRouter = require("./api/paintingsdb");
+const genreRouter = require("./api/genredb");
 const PORT = process.env.PORT;
 const app = express();
 
@@ -7,27 +12,30 @@ app.get("/", (req, res) => {
   res.send("hello");
 });
 
-router.getAllEras(app);
-router.getAllGalleries(app);
-router.getGalleriesById(app);
-router.getGalleriesBySubstring(app);
-router.getAllArtists(app);
-router.getArtistsById(app);
-router.getArtistByLastName(app);
-router.getArtistsByCountry(app);
-router.getAllPaintings(app);
-router.getPaintingsByTitleOrYear(app);
-router.getArtistsById(app);
-router.getPaintingById(app);
-router.getPaintingsBySearch(app);
-router.getPaintingsInRange(app);
-router.getPaintingsByGalleryId(app);
-router.getPaintingsByArtistId(app);
-router.getPaintingsByArtistCountry(app);
-router.getAllGenres(app);
-router.getGenresById(app);
-router.getGenresByPaintingId(app);
-router.getPaintingInfoFromGenreId(app);
+erasRouter.getAllEras(app);
+
+galleriesRouter.getAllGalleries(app);
+galleriesRouter.getGalleriesById(app);
+galleriesRouter.getGalleriesBySubstring(app);
+
+artistRouter.getAllArtists(app);
+artistRouter.getArtistsById(app);
+artistRouter.getArtistByLastName(app);
+artistRouter.getArtistsByCountry(app);
+
+paintingRouter.getAllPaintings(app);
+paintingRouter.getPaintingsByTitleOrYear(app);
+paintingRouter.getPaintingById(app);
+paintingRouter.getPaintingsBySearch(app);
+paintingRouter.getPaintingsInRange(app);
+paintingRouter.getPaintingsByGalleryId(app);
+paintingRouter.getPaintingsByArtistId(app);
+paintingRouter.getPaintingsByArtistCountry(app);
+
+genreRouter.getAllGenres(app);
+genreRouter.getGenresById(app);
+genreRouter.getGenresByPaintingId(app);
+genreRouter.getPaintingInfoFromGenreId(app);
 
 app.listen(PORT, () => {
   console.log("Server is listening on port: " + PORT);
