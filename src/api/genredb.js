@@ -48,29 +48,8 @@ const getGenresById = (app) => {
   });
 };
 
-const getPaintingInfoFromGenreId = (app) => {
-  app.get("/api/paintings/genre/:id", async (req, res) => {
-    const { data, error } = await db
-      .from("paintingGenres")
-      .select(`paintings:paintings (paintingId, title, yearOfWork)`)
-      .eq("genreId", req.params.id)
-      .order("paintings(yearOfWork)", {
-        ascending: true,
-      });
-
-    if (error) {
-      res.send(jsonMsg("Error: unable to satisfy request", error));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
-      return;
-    }
-    res.send(data);
-  });
-};
-
 module.exports = {
   getAllGenres,
   getGenresById,
   getGenresByPaintingId,
-  getPaintingInfoFromGenreId,
 };

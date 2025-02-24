@@ -35,7 +35,7 @@ paintingRouter.getPaintingsByArtistCountry(app);
 genreRouter.getAllGenres(app);
 genreRouter.getGenresById(app);
 genreRouter.getGenresByPaintingId(app);
-genreRouter.getPaintingInfoFromGenreId(app);
+paintingRouter.getPaintingInfoFromGenreId(app);
 
 app.listen(PORT, () => {
   console.log("Server is listening on port: " + PORT);
