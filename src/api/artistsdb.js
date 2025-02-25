@@ -1,70 +1,55 @@
-const { db, jsonMsg } = require("./db-connect");
+const { db } = require("./db-connect");
+const { handleAsync, handleDbResponse } = require("./utils/errorHandler");
 
 const artistSql = `"artistId","firstName","lastName","nationality","gender","yearOfBirth","yearOfDeath","details","artistLink"`;
 
 const getAllArtists = (app) => {
-  app.get("/api/artists", async (req, res) => {
+  app.get("/api/artists", handleAsync(async (req, res) => {
     const { data, error } = await db.from("artists").select(artistSql);
-    if (error) {
-      res.send(jsonMsg("Error: unable to satisfy request", error));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
-      return;
-    }
-    res.send(data);
-  });
+    
+    if (handleDbResponse(data, error, res, "No artists found")) return;
+    
+    res.status(200).json(data);
+  }, "getAllArtists"));
 };
 
 const getArtistsById = (app) => {
-  app.get("/api/artists/:id", async (req, res) => {
+  app.get("/api/artists/:id", handleAsync(async (req, res) => {
     const { data, error } = await db
       .from("artists")
       .select(artistSql)
       .eq("artistId", req.params.id);
 
-    if (error) {
-      res.send(jsonMsg("Error: unable to satisfy request", error));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
-      return;
-    }
+    if (handleDbResponse(data, error, res, `Artist with id ${req.params.id} not found`)) return;
 
-    res.send(data);
-  });
+    res.status(200).json(data);
+  }, "getArtistsById"));
 };
 
 const getArtistByLastName = (app) => {
-  app.get("/api/artists/search/:substring", async (req, res) => {
+  app.get("/api/artists/search/:substring", handleAsync(async (req, res) => {
     const { data, error } = await db
       .from("artists")
       .select(artistSql)
       .ilike("lastName", `${req.params.substring}%`);
 
-    if (error) {
-      res.send(jsonMsg("Error: unable to satisfy request", error));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
-      return;
-    }
-    res.send(data);
-  });
+    if (handleDbResponse(data, error, res, `No artists found with last name matching '${req.params.substring}'`)) return;
+
+    res.status(200).json(data);
+  }, "getArtistByLastName"));
 };
 
 const getArtistsByCountry = (app) => {
-  app.get("/api/artists/country/:substring", async (req, res) => {
+  app.get("/api/artists/country/:substring", handleAsync(async (req, res) => {
     const { data, error } = await db
       .from("artists")
       .select(artistSql)
       .ilike("nationality", `${req.params.substring}%`);
 
-    if (error) {
-      res.send(jsonMsg("Error: unable to satisfy request", error));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
-      return;
-    }
-    res.send(data);
-  });
+    if (handleDbResponse(data, error, res, `No artists found from country matching '${req.params.substring}'`)) return;
+
+    res.status(200).json(data);
+  }, "getArtistsByCountry"));
 };
 
 module.exports = {
