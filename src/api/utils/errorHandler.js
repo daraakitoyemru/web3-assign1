@@ -1,16 +1,18 @@
 const { jsonMsg } = require("../db-connect");
 
-const handleAsync = (handler, routeName) => {
+// general handler for express instance
+const handleAsync = (handler, route) => {
   return async (req, res) => {
     try {
       await handler(req, res);
     } catch (err) {
-      console.error(`Error in ${routeName}:`, err);
+      console.error(`Error in ${route}:`, err);
       res.status(500).json(jsonMsg("Internal server error", err.message));
     }
   };
 };
 
+// general response message manager
 const handleDbResponse = (
   data,
   error,
@@ -24,7 +26,7 @@ const handleDbResponse = (
 
   if (!data || data.length === 0) {
     res.status(404).json(jsonMsg(notFoundMessage));
-    return true;
+    return true; // prevent server crash
   }
 
   return false;

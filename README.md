@@ -4,7 +4,7 @@
 
 ### Overview
 
-This repository contains code for an Art API. The assignment makes use of Node and Express to efficiently manage the server and the possible routes that may be taken. Data for eras, galleries, artists, paintings, and genres are able to be fetched from the server. The data is returned in JSON form.
+This repository contains code for the Art API. The assignment makes use of Node and Express to manage the server and the possible routes. Data for eras, galleries, artists, paintings, and genres are able to be fetched from the server. The data is returned in JSON form.
 
 ![Node.js](https://img.shields.io/badge/Node.js-22.12.0-green) ![Express](https://img.shields.io/badge/Express-4.21.1-blue) ![Deployed on](https://img.shields.io/badge/Deployed%20on-Render.com-orange)
 
@@ -30,11 +30,16 @@ Response:
 
 ## Project Files
 
-| File             | Description                                                                |
-| ---------------- | -------------------------------------------------------------------------- |
-| server.js        | Contains the code for the server itself and starts listening for requests. |
-| data_provider.js | Fetches data from the data folder and exports it for use by the router.    |
-| router.js        | Handles possible routes, filtering and returning appropriate JSON data.    |
+| File               | Description                                                                |
+| ------------------ | -------------------------------------------------------------------------- |
+| server.js          | Contains the code for the server itself and starts listening for requests. |
+| api/db-connect.js  | Handles database connection and configuration.                             |
+| api/counts.js      | Handles counting and grouping endpoints.                                   |
+| api/galleriesdb.js | Manages gallery-related database operations and endpoints.                 |
+| api/erasdb.js      | Handles era-related database operations and endpoints.                     |
+| api/artistsdb.js   | Manages artist-related database operations and endpoints.                  |
+| api/paintingsdb.js | Handles painting-related database operations and endpoints.                |
+| api/genredb.js     | Manages genre-related database operations and endpoints.                   |
 
 ## Testing
 
