@@ -65,10 +65,7 @@ const getCountForPaintingsPerGenreWithLimit = (app) => {
 
     if (error) {
       res.send(jsonMsg("Error: unable to satisfy request", error));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
-      return;
-    } else {
+    } else if (data.length !== 0) {
       const genreCounts = data.reduce((acc, item) => {
         const genreName = item.genres["genreName"];
         acc[genreName] = (acc[genreName] || 0) + 1;
@@ -82,6 +79,8 @@ const getCountForPaintingsPerGenreWithLimit = (app) => {
       );
 
       res.send(sorted.filter((s) => s.numOfPaintings > req.params.count));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
     }
   });
 };
