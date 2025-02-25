@@ -79,8 +79,6 @@ const getCountForPaintingsPerGenreWithLimit = (app) => {
       );
 
       res.send(sorted.filter((s) => s.numOfPaintings > req.params.count));
-    } else if (data.length == 0) {
-      res.send(jsonMsg("Record not found"));
     }
   });
 };
