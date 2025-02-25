@@ -65,6 +65,9 @@ const getCountForPaintingsPerGenreWithLimit = (app) => {
 
     if (error) {
       res.send(jsonMsg("Error: unable to satisfy request", error));
+    } else if (data.length == 0) {
+      res.send(jsonMsg("Record not found"));
+      return;
     } else {
       const genreCounts = data.reduce((acc, item) => {
         const genreName = item.genres["genreName"];
