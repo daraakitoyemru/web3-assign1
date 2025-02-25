@@ -5,6 +5,7 @@ const galleriesRouter = require("./api/galleriesdb");
 const artistRouter = require("./api/artistsdb");
 const paintingRouter = require("./api/paintingsdb");
 const genreRouter = require("./api/genredb");
+const countsRouter = require("./api/counts");
 const PORT = process.env.PORT;
 const app = express();
 
@@ -37,6 +38,10 @@ paintingRouter.getPaintingInfoFromEraId(app);
 genreRouter.getAllGenres(app);
 genreRouter.getGenresById(app);
 genreRouter.getGenresByPaintingId(app);
+
+countsRouter.getCountForPaintingsPerGenre(app);
+countsRouter.getCountForPaintingsPerArtist(app);
+countsRouter.getCountForPaintingsPerGenreWithLimit(app);
 
 app.listen(PORT, () => {
   console.log("Server is listening on port: " + PORT);
