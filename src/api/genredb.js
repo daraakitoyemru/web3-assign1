@@ -17,16 +17,18 @@ const getAllGenres = (app) => {
 const getGenresByPaintingId = (app) => {
   app.get("/api/genres/painting/:id", async (req, res) => {
     const { data, error } = await db
-      .from("genres")
-      .select(genreSql)
-      .eq("paintingGenres.paintingId", req.params.id)
-      .order("genreName", { ascending: true });
+      .from("paintingGenres")
+      .select(`genres (${genreSql})`)
+      .eq("paintingId", req.params.id)
+      .order("genreName", { foreignTable: "genres", ascending: true });
+
     if (error) {
       res.send(jsonMsg("Error: unable to satisfy request", error));
     } else if (data.length == 0) {
       res.send(jsonMsg("Record not found"));
       return;
     }
+    console.log();
     res.send(data);
   });
 };
