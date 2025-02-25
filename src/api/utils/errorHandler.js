@@ -6,7 +6,7 @@ const handleAsync = (handler, route) => {
     try {
       await handler(req, res);
     } catch (err) {
-      console.error(`Error in ${route}:`, err);
+      console.error(`Error in ${route}:`, err); // <-- endpoint error log for debug
       res.status(500).json(jsonMsg("Internal server error", err.message));
     }
   };
