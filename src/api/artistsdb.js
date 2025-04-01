@@ -1,4 +1,4 @@
-const { db } = require("./db-connect");
+const { db, encodeSpecialChars } = require("./db-connect");
 const { handleAsync, handleDbResponse } = require("./utils/errorHandler");
 
 const artistSql = `"artistId","firstName","lastName","nationality","gender","yearOfBirth","yearOfDeath","details","artistLink"`;
@@ -11,7 +11,13 @@ const getAllArtists = (app) => {
 
       if (handleDbResponse(data, error, res, "No artists found")) return;
 
-      res.status(200).json(data);
+      // Ensure proper encoding for special characters
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      
+      // Process the data to handle special characters
+      const encodedData = encodeSpecialChars(data);
+      
+      res.status(200).json(encodedData);
     }, "getAllArtists")
   );
 };
@@ -35,7 +41,13 @@ const getArtistsById = (app) => {
       )
         return;
 
-      res.status(200).json(data);
+      // Ensure proper encoding for special characters
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      
+      // Process the data to handle special characters
+      const encodedData = encodeSpecialChars(data);
+      
+      res.status(200).json(encodedData);
     }, "getArtistsById")
   );
 };
@@ -59,7 +71,13 @@ const getArtistByLastName = (app) => {
       )
         return;
 
-      res.status(200).json(data);
+      // Ensure proper encoding for special characters
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      
+      // Process the data to handle special characters
+      const encodedData = encodeSpecialChars(data);
+      
+      res.status(200).json(encodedData);
     }, "getArtistByLastName")
   );
 };
@@ -83,7 +101,13 @@ const getArtistsByCountry = (app) => {
       )
         return;
 
-      res.status(200).json(data);
+      // Ensure proper encoding for special characters
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      
+      // Process the data to handle special characters
+      const encodedData = encodeSpecialChars(data);
+      
+      res.status(200).json(encodedData);
     }, "getArtistsByCountry")
   );
 };

@@ -7,6 +7,7 @@ const handleAsync = (handler, route) => {
       await handler(req, res);
     } catch (err) {
       console.error(`Error in ${route}:`, err); // <-- endpoint error log for debug
+      res.header('Content-Type', 'application/json; charset=utf-8');
       res.status(500).json(jsonMsg("Internal server error", err.message));
     }
   };
@@ -20,11 +21,13 @@ const handleDbResponse = (
   notFoundMessage = "Record not found"
 ) => {
   if (error) {
+    res.header('Content-Type', 'application/json; charset=utf-8');
     res.status(500).json(jsonMsg("Error: unable to satisfy request", error));
     return true;
   }
 
   if (!data || data.length === 0) {
+    res.header('Content-Type', 'application/json; charset=utf-8');
     res.status(404).json(jsonMsg(notFoundMessage));
     return true; // prevent server crash
   }

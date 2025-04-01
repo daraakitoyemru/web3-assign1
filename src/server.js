@@ -10,6 +10,10 @@ const countsRouter = require("./api/counts");
 const PORT = process.env.PORT;
 const app = express();
 
+// Set character encoding for proper handling of special characters
+app.use(express.json({ charset: 'utf-8' }));
+app.use(express.urlencoded({ extended: true, charset: 'utf-8' }));
+
 // CORS Configuration
 const corsOptions = {
   origin: ["http://localhost:5173", "https://art-api-he4r.onrender.com", /\.onrender\.com$/],
@@ -21,6 +25,15 @@ const corsOptions = {
 
 // Apply CORS middleware
 app.use(cors(corsOptions));
+
+// Set response headers for proper character encoding
+app.use((req, res, next) => {
+  res.header('Content-Type', 'application/json; charset=utf-8');
+  res.header('Accept-Charset', 'utf-8');
+  // Force UTF-8 encoding for all responses
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("hello");
