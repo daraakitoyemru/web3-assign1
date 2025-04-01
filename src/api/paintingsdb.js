@@ -1,4 +1,4 @@
-const { db } = require("./db-connect");
+const { db, encodeSpecialChars } = require("./db-connect");
 const { handleAsync, handleDbResponse } = require("./utils/errorHandler");
 
 const paintingsSql = `
@@ -19,7 +19,13 @@ const getAllPaintings = (app) => {
 
     if (handleDbResponse(data, error, res, "No paintings found")) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getAllPaintings"));
 };
 
@@ -43,7 +49,13 @@ const getPaintingsByTitleOrYear = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found to sort by ${req.params.var}`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingsByTitleOrYear"));
 };
 
@@ -57,7 +69,13 @@ const getPaintingById = (app) => {
 
     if (handleDbResponse(data, error, res, `Painting with id ${req.params.id} not found`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingById"));
 };
 
@@ -71,7 +89,13 @@ const getPaintingsBySearch = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found matching '${req.params.substring}'`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingsBySearch"));
 };
 
@@ -96,7 +120,13 @@ const getPaintingsInRange = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found between years ${start} and ${end}`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingsInRange"));
 };
 
@@ -110,7 +140,13 @@ const getPaintingsByGalleryId = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found for gallery with id ${req.params.id}`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingsByGalleryId"));
 };
 
@@ -124,7 +160,13 @@ const getPaintingsByArtistId = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found for artist with id ${req.params.id}`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingsByArtistId"));
 };
 
@@ -138,8 +180,14 @@ const getPaintingsByArtistCountry = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found by artists from country matching '${req.params.substring}'`)) return;
 
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const filteredData = data.filter((d) => d.artists !== null);
-    res.status(200).json(filteredData);
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(filteredData);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingsByArtistCountry"));
 };
 
@@ -155,7 +203,13 @@ const getPaintingInfoFromGenreId = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found for genre with id ${req.params.id}`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingInfoFromGenreId"));
 };
 
@@ -173,7 +227,13 @@ const getPaintingInfoFromEraId = (app) => {
 
     if (handleDbResponse(data, error, res, `No paintings found for era with id ${req.params.id}`)) return;
 
-    res.status(200).json(data);
+    // Ensure proper encoding for special characters
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // Process the data to handle special characters
+    const encodedData = encodeSpecialChars(data);
+    
+    res.status(200).json(encodedData);
   }, "getPaintingInfoFromEraId"));
 };
 module.exports = {
