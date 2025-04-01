@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 
 const erasRouter = require("./api/erasdb");
 const galleriesRouter = require("./api/galleriesdb");
@@ -8,6 +9,18 @@ const genreRouter = require("./api/genredb");
 const countsRouter = require("./api/counts");
 const PORT = process.env.PORT;
 const app = express();
+
+// CORS Configuration
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://art-api-he4r.onrender.com", /\.onrender\.com$/],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("hello");
