@@ -14,11 +14,48 @@ const getAllGenres = (app) => {
   app.get(
     "/api/genres",
     handleAsync(async (req, res) => {
-      const { data, error } = await db.from("genres").select(genreSql);
+      // First get all genres
+      const { data: genresData, error: genresError } = await db
+        .from("genres")
+        .select(genreSql);
 
-      if (handleDbResponse(data, error, res, "No genres found")) return;
+      if (handleDbResponse(genresData, genresError, res, "No genres found"))
+        return;
 
-      res.status(200).json(data);
+      // For each genre, get related paintings
+      const genresWithPaintings = await Promise.all(
+        genresData.map(async (genre) => {
+          const { data: paintingsData, error: paintingsError } = await db
+            .from("paintingGenres")
+            .select(`paintings:paintings (${paintingsSql})`)
+            .eq("genreId", genre.genreId)
+            .order("paintings(yearOfWork)", { ascending: true });
+
+          if (paintingsError) {
+            console.error(
+              `Error fetching paintings for genre ${genre.genreId}:`,
+              paintingsError
+            );
+            return {
+              ...genre,
+              paintings: [],
+            };
+          }
+
+          return {
+            ...genre,
+            paintings: paintingsData.map((item) => item.paintings),
+          };
+        })
+      );
+
+      // Ensure proper encoding for special characters
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+      // Process the data to handle special characters
+      const encodedData = encodeSpecialChars(genresWithPaintings);
+
+      res.status(200).json(encodedData);
     }, "getAllGenres")
   );
 };
