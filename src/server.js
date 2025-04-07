@@ -64,6 +64,7 @@ paintingRouter.getPaintingInfoFromEraId(app);
 genreRouter.getAllGenres(app);
 genreRouter.getGenresById(app);
 genreRouter.getGenresByPaintingId(app);
+genreRouter.getGenreWithPaintings(app);
 
 countsRouter.getCountForPaintingsPerGenre(app);
 countsRouter.getCountForPaintingsPerArtist(app);
