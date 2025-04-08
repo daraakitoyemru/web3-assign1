@@ -16,12 +16,7 @@ app.use(express.urlencoded({ extended: true, charset: "utf-8" }));
 
 // CORS Configuration
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://art-dashboard-29c21og8r-daras-projects-b15f6062.vercel.app",
-    "https://art-api-he4r.onrender.com",
-    /\.onrender\.com$/,
-  ],
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
